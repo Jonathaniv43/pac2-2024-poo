@@ -1,5 +1,6 @@
 ﻿using BlogUNAH.API.Database.Entities;
 using BlogUNAH.API.Dtos.Categories;
+using BlogUNAH.API.Dtos.Common;
 using BlogUNAH.API.Services.Interfaces;
 
 using Newtonsoft.Json;
@@ -16,19 +17,32 @@ namespace BlogUNAH.Api.Services
         {
             _JSON_FILE = "SeedData/categories.json";
         }
-        public async Task<List<CategoryDto>> GetCategoriesListAsync()
+        public async Task<ResponseDto<List<CategoryDto>>> GetCategoriesListAsync()
         {
-            return await ReadCategoriesFromFileAsync();
+            //return await ReadCategoriesFromFileAsync();
+            return new ResponseDto<List<CategoryDto>>
+            {
+                StatusCode = 200,
+                Status = true,
+                Message = "Listado de registo obtenida correctamente",
+                Data = await ReadCategoriesFromFileAsync()
+            };
 
         }
-        public async Task<CategoryDto> GetCategoryByIdAsync(Guid id)
+        public async Task<ResponseDto<CategoryDto>> GetCategoryByIdAsync(Guid id)
         {
             var categories = await ReadCategoriesFromFileAsync();
             CategoryDto category = categories.FirstOrDefault(c => c.Id == id);
-            
-            return category;
+
+            return new ResponseDto<CategoryDto>
+            {
+                StatusCode = 200,
+                Status = true,
+                Message = "Registro obtenido satisfactoriamente ",
+                Data = category
+            };
         }
-        public async Task<bool> CreateAsync(CategoryCreateDto dto)
+        public async Task<ResponseDto<CategoryDto>> CreateAsync(CategoryCreateDto dto)
         {
             var categoriesDtos = await ReadCategoriesFromFileAsync();
            
@@ -40,7 +54,7 @@ namespace BlogUNAH.Api.Services
                 Description = dto.Description,
             };
             categoriesDtos.Add(categoryDto);
-            var categories = categoriesDtos.Select(x => new Category{
+            var categories = categoriesDtos.Select(x => new CategoryEntity{
                 Id= x.Id,
                 Name = x.Name,
                 Description = x.Description,    
@@ -48,15 +62,27 @@ namespace BlogUNAH.Api.Services
 
             }).ToList();
             await WriteCategoriesToFileAsync(categories);
-            return true; 
+            return new ResponseDto<CategoryDto>
+            {
+                StatusCode = 201,
+                Status = true,
+                Message = "Registro creado satisfactoriamente ",
+              
+
+            };
         }
-        public async Task<bool> EditAsync(CategoryEditDto dto, Guid id)
+        public async Task<ResponseDto<CategoryDto>> EditAsync(CategoryEditDto dto, Guid id)
         {
             var categoriesDto = await ReadCategoriesFromFileAsync();
             var existingCategory = categoriesDto.FirstOrDefault(category => category.Id == id);
             if (existingCategory is null) 
-            { 
-                return false;
+            {
+                return new ResponseDto<CategoryDto>
+                {
+                    StatusCode = 404,
+                    Status = false,
+                    Message = $"El registro {id} no fue encontrado"
+                };
             }
             //existingCategory.Name = dto.Name;
             //existingCategory.Description = dto.Description;
@@ -71,7 +97,7 @@ namespace BlogUNAH.Api.Services
 
                 }
             }
-            var categories = categoriesDto.Select(x => new Category
+            var categories = categoriesDto.Select(x => new CategoryEntity
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -80,20 +106,30 @@ namespace BlogUNAH.Api.Services
 
             }).ToList();
             await WriteCategoriesToFileAsync(categories);
-            return true;
+            return new ResponseDto<CategoryDto>
+            {
+                StatusCode = 200,
+                Status = true,
+                Message = $"El registro editado correctamente"
+            };
         }
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<ResponseDto<CategoryDto>> DeleteAsync(Guid id)
         {
             var categoriesDto = await ReadCategoriesFromFileAsync();
             var categoryToDelete = categoriesDto.FirstOrDefault(x => x.Id == id);
             if (categoryToDelete is null)
             {
-                return false;
+                return new ResponseDto<CategoryDto>
+                {
+                    StatusCode = 404,
+                    Status = false,
+                    Message = $"El registro {id} no fue encontrado"
+                };
 
             }
             categoriesDto.Remove(categoryToDelete);
 
-            var categories = categoriesDto.Select(x => new Category
+            var categories = categoriesDto.Select(x => new CategoryEntity
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -102,8 +138,13 @@ namespace BlogUNAH.Api.Services
 
             }).ToList();
             await WriteCategoriesToFileAsync(categories);
-            return true;
-        }
+            return new ResponseDto<CategoryDto>
+            {
+                StatusCode = 200,
+                Status = true,
+                Message = "Registro borrado correctamente"
+            };
+            }
 
         private async Task<List<CategoryDto>> ReadCategoriesFromFileAsync()
         {
@@ -114,7 +155,7 @@ namespace BlogUNAH.Api.Services
 
             var json = await File.ReadAllTextAsync(_JSON_FILE);
 
-            var categories = JsonConvert.DeserializeObject<List<Category>>(json);
+            var categories = JsonConvert.DeserializeObject<List<CategoryEntity>>(json);
 
             var dtos = categories.Select(x => new CategoryDto
             {
@@ -128,7 +169,7 @@ namespace BlogUNAH.Api.Services
             return dtos ;
         }
 
-        private async Task WriteCategoriesToFileAsync(List<Category> categories)
+        private async Task WriteCategoriesToFileAsync(List<CategoryEntity> categories)
         {
             var json = JsonConvert.SerializeObject(categories, Formatting.Indented);
             if (File.Exists(_JSON_FILE))

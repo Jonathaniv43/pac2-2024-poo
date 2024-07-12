@@ -1,5 +1,6 @@
 ﻿using BlogUNAH.API.Database.Entities;
 using BlogUNAH.API.Dtos.Categories;
+using BlogUNAH.API.Dtos.Common;
 using BlogUNAH.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,7 +14,7 @@ namespace BlogUNAH.Api.Controllers
     [Route("api/categories")]
     public class CategoriesController : ControllerBase
     {
-        private List<Category> _categories;
+        private List<CategoryEntity> _categories;
         private readonly ICategoriesService _categoriesService;
 
         public CategoriesController(ICategoriesService categoriesService)
@@ -29,24 +30,27 @@ namespace BlogUNAH.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult<ResponseDto<List<CategoryDto>>>> GetAll()
         {
-            return Ok(await _categoriesService.GetCategoriesListAsync());
+            var response = await _categoriesService.GetCategoriesListAsync();
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult<ResponseDto<CategoryDto>>> Get(Guid id)
         {
-            var category = await _categoriesService.GetCategoryByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound(new { Message = $"No se encontró la categoría: {id}" });
-            }
-            return Ok(category);
+            //var category = await _categoriesService.GetCategoryByIdAsync(id);
+            //if (category == null)
+            //{
+            //    return NotFound(new { Message = $"No se encontró la categoría: {id}" });
+            //}
+            //return Ok(category);
+            var response  = await _categoriesService.GetCategoryByIdAsync(id);
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CategoryCreateDto dto)
+        public async Task<ActionResult<ResponseDto<CategoryDto>>> Create(CategoryCreateDto dto)
         {
             //bool categoryExist = _categories.Any(x => x.
             //Name.ToUpper().Trim().Contains(category.Name.ToUpper()));
@@ -69,37 +73,37 @@ namespace BlogUNAH.Api.Controllers
             //{
             //    return BadRequest(new {Message = "La descripción debe tener al menos 10 catacteres"});
             //}
-            await _categoriesService.CreateAsync(dto);
+            var response = await _categoriesService.CreateAsync(dto);
 
 
 
-            return StatusCode(201);
+            return StatusCode(response.StatusCode, response);
 
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Edit(CategoryEditDto dto, Guid id)
+        public async Task<ActionResult<ResponseDto<CategoryDto>>> Edit(CategoryEditDto dto, Guid id)
         {
-            var result = await _categoriesService.EditAsync(dto, id);
-            if (!result)
-            {
-                return NotFound();
-            }
-            return Ok();
+            var response = await _categoriesService.EditAsync(dto, id);
+            //if (!result)
+            //{
+            //    return NotFound();
+            //}
+            return StatusCode(response.StatusCode, response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult<ResponseDto<CategoryDto>>> Delete(Guid id)
         {
-            var category = await _categoriesService.GetCategoryByIdAsync(id);
+            //var response = await _categoriesService.GetCategoryByIdAsync(id);
 
-            if (category  is null)
-            {
-                return NotFound();
-            }
+            //if (category  is null)
+            //{
+            //    return NotFound();
+            //}
 
-            await _categoriesService.DeleteAsync(id);
-            return Ok();
+            var response = await _categoriesService.DeleteAsync(id);
+            return StatusCode(response.StatusCode,response);
         }
     }
 }

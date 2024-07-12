@@ -1,17 +1,28 @@
-[
-  {
-    "Id": "1ca98a25-a1fe-4a84-a339-9d3086b9ed77",
-    "Name": "JavaScript",
-    "Description": "El lengaje mas entretenido del mundo mundial"
-  },
-  {
-    "Id": "634b6b24-29d2-4fd5-a5dd-d423961e0abd",
-    "Name": "NodeJs",
-    "Description": "Entorno de ejecución de JavaScript"
-  },
-  {
-    "Id": "476ec9f3-8642-4019-a87b-8ff5946be58d",
-    "Name": "Unah | Editado",
-    "Description": "Articulos Relacionados a la Universidad"
-  }
-]
+
+  [
+    {
+      "Id": "543aa099-c9a3-4129-a29b-92c34e4c4828",
+      "Name": "Noticias Tecnológicas",
+      "Description": "Últimas novedades y avances en el mundo de la tecnología y la informática"
+    },
+    {
+      "Id": "523793da-6aec-428c-8b9a-8440e4942f82",
+      "Name": "Lenguajes de Programación",
+      "Description": "Información, tutoriales y tendencias sobre diversos lenguajes de programación"
+    },
+    {
+      "Id": "f65ece15-da8c-4df0-a54a-6a91e67dd75a",
+      "Name": "Eventos Académicos",
+      "Description": "Conferencias, talleres y actividades relacionadas con la carrera de ingeniería en sistemas"
+    },
+    {
+      "Id": "21abd8c2-e887-4f01-85a5-6be5df519761",
+      "Name": "Proyectos Estudiantiles",
+      "Description": "Destacados proyectos y trabajos realizados por estudiantes de ingeniería en sistemas"
+    },
+    {
+      "Id": "9af9cb41-f64f-4e10-9867-37595812bbdb",
+      "Name": "Innovación y Emprendimiento",
+      "Description": "Oportunidades y casos de éxito en el campo de la innovación tecnológica y el emprendimiento"
+    }
+  ]

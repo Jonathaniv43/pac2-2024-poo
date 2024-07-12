@@ -22,7 +22,7 @@ using IntroduccionCsharp.Ejemplos.Herencia;
 //EmleadoPorHora empleadoPorHora = new("Mario Cruz", 3, 0, 56, 300);
 
 //Console.WriteLine("$El salario por hora es: "{empleadoPorHora.CalcularSalario()});
-CuentaBancaria cuentaBancariaJuanPerez = new(1000);
+CuentaBancaria cuentaBancariaJuanPerez = new(1002);
 Console.WriteLine("Saldo Inicial" + cuentaBancariaJuanPerez.ObtenerSaldo());
 
 cuentaBancariaJuanPerez.Depositar(100);

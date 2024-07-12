@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace IntroduccionCsharp.Ejemplos.Herencia
 {
+
     public class EmpleadoPorHora : Empleado
- public class EmpleadoPorHora : Empleado
     {
         public int HorasTrabajadas { get; set; }
         public decimal TarifaPorHora { get; set; }
@@ -25,3 +25,4 @@ namespace IntroduccionCsharp.Ejemplos.Herencia
         }
 
     }
+}
